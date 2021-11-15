@@ -1,0 +1,23 @@
+{
+  "name": "quizz",
+  "version": "1.0.0",
+  "description": "Project for applied programming course in Media Systems at HAW-Hamburg",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/53854/ANPRG1.git"
+  },
+  "author": "53854, anhvu1012",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/53854/ANPRG1/issues"
+  },
+  "homepage": "https://github.com/53854/ANPRG1#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
