@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Create a new account</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <h3>Please enter your data below to be our new competitor</h3>
+        <form action="/signupcheck" method="POST">
+            <label for="username">Username:</label><br>
+            <input type="text" name="username"><br>
+            <label for="passwort">Password:</label><br>
+            <input type="text" name="passwort"><br>
+            <label for="repeat">Repeat the password:</label><br>
+            <input type="text" name="repeat"><br>
+            <button type="submit">Submit</button>
+        </form>
+        <p>
+            <a href="/landing">Back to Homepage</a>
+        </p>
+    </body>
+</html>

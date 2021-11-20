@@ -34,6 +34,17 @@ app.get(["/", "index", "landing"], function (req, res) {
     });
 });
 
+// get req /login
+app.get('/login', function(req, res){
+    res.sendFile(__dirname + '/views/login.html');
+});
+
+// Things to add:
+// get req /questionstart in landing page from guest
+// post req /logincheck and if successful, to question page
+// get req /register
+// post req /signupcheck and if successful, back to log in
+
 app.get(["question", "demo"], function (req, res) {
     // Setup Question page with TDB json
 

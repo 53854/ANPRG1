@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Login</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <h3>Enter your username and passwort below</h3>
+        <form action="/logincheck" method="POST">
+            <label for="username">Username:</label><br>
+            <input type="text" name="username"><br>
+            <label for="passwort">Password:</label><br>
+            <input type="text" name="passwort"><br>
+            <button type="submit">Submit</button>
+        </form>
+
+        <h4>You are a new competitor?</h4>
+        <p>
+            <a href="/register">Sign up here</a>
+        </p>
+    </body>
+</html>
