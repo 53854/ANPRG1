@@ -18,11 +18,11 @@ app.set("view engine", "ejs");
 
 // Start server
 app.listen(3000, function () {
-
+    console.log("Server started on port 3000");
 });
 
 app.get(["/", "index", "landing"], function (req, res) {
-    res.render("landing");
+
 
     // on start quiz handle quiz generation and management
     quiz.getQuiz(10).then(function (quiz_set) {
@@ -30,16 +30,25 @@ app.get(["/", "index", "landing"], function (req, res) {
         // use session cookie for question set storage?
         // or use a database?
 
-        console.log(quiz_set)
+        var question_arr = [];
+
+        quiz_set.forEach(e => {
+            question_arr.push(e.question);
+        });
+
+        res.render("landing", {
+            arr: question_arr
+        });
     });
 });
 
 // get req /login
-app.get('/login', function(req, res){
-    res.sendFile(__dirname + '/views/login.html');
+app.get('/login', function (req, res) {
+    //res.sendFile(__dirname + '/views/login.html');
+    res.render('login');
 });
 
-// Things to add:
+// * Things to add:
 // get req /questionstart in landing page from guest
 // post req /logincheck and if successful, to question page
 // get req /register
