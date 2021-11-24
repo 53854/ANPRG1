@@ -2,7 +2,7 @@
 <html>
     <head>
         <title>Create a new account</title>
-        <link rel="stylesheet" href="style.css">
+        <link href="views/style.css" rel="stylesheet" type="text/css">
     </head>
     <body>
         <h3>Please enter your data below to be our new competitor</h3>
@@ -14,6 +14,11 @@
             <label for="repeat">Repeat the password:</label><br>
             <input type="text" name="repeat"><br>
             <button type="submit">Submit</button>
+            <div>
+                <% if (typeof error != "undefined") { %>
+                    <%= error %>
+                <% } %>
+            </div>
         </form>
         <p>
             <a href="/landing">Back to Homepage</a>

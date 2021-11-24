@@ -50,9 +50,9 @@ app.get('/login', function (req, res) {
 
 // * Things to add:
 // get req /questionstart in landing page from guest
-// post req /logincheck and if successful, to question page
+// post req /logincheck and if successful, to question page, if not res.render('login', {error: "Login failed.."})
 // get req /register
-// post req /signupcheck and if successful, back to log in
+// post req /signupcheck and if successful, back to log in, if not res.render('register', {error: "Account has been used.."})
 
 app.get(["/question", "/demo"], function (req, res) {
     // Setup Question page with TDB json

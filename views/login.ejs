@@ -2,7 +2,7 @@
 <html>
     <head>
         <title>Login</title>
-        <link rel="stylesheet" href="style.css">
+        <link href="views/style.css" rel="stylesheet" type="text/css">
     </head>
     <body>
         <h3>Enter your username and passwort below</h3>
@@ -12,6 +12,11 @@
             <label for="passwort">Password:</label><br>
             <input type="text" name="passwort"><br>
             <button type="submit">Submit</button>
+            <div>
+                <% if (typeof error != "undefined") { %>
+                    <%= error %>
+                <% } %>
+            </div>
         </form>
 
         <h4>You are a new competitor?</h4>
