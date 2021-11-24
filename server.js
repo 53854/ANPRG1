@@ -44,7 +44,6 @@ app.get(["/", "/index", "/landing"], function (req, res) {
 
 // get req /login
 app.get('/login', function (req, res) {
-    //res.sendFile(__dirname + '/views/login.html');
     res.render('login');
 });
 
