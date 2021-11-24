@@ -21,7 +21,7 @@ app.listen(3000, function () {
     console.log("Server started on port 3000");
 });
 
-app.get(["/", "index", "landing"], function (req, res) {
+app.get(["/", "/index", "/landing"], function (req, res) {
 
 
     // on start quiz handle quiz generation and management
@@ -54,7 +54,7 @@ app.get('/login', function (req, res) {
 // get req /register
 // post req /signupcheck and if successful, back to log in
 
-app.get(["question", "demo"], function (req, res) {
+app.get(["/question", "/demo"], function (req, res) {
     // Setup Question page with TDB json
 
     res.render("question");
