@@ -5,6 +5,7 @@ const app = express();
 
 // Make public directory available to the server
 app.use(express.static(__dirname + "views"));
+app.use(express.static("public"));
 
 // Enable body and json parsing
 app.use(express.urlencoded({
@@ -15,6 +16,14 @@ app.use(express.json());
 // Load and enable ejs module
 app.engine(".ejs", require("ejs").__express);
 app.set("view engine", "ejs");
+
+// connect to the accounts database
+const DATABASE = "accounts.db"
+const sqlite3 = require("sqlite3").verbose();
+const db = new sqlite3.Database(DATABASE, (err) => { if (err) {
+    console.error(err.message); }
+    console.log('Connected to the accounts database.');
+});
 
 // Start server
 app.listen(3000, function () {
@@ -46,13 +55,66 @@ app.get(["/", "/index", "/landing"], function (req, res) {
 app.get('/login', function (req, res) {
     res.render('login');
 });
-
-// * Things to add:
-// get req /questionstart in landing page from guest
-// post req /logincheck and if successful, to question page, if not res.render('login', {error: "Login failed.."})
 // get req /register
-// post req /signupcheck and if successful, back to log in, if not res.render('register', {error: "Account has been used.."})
+app.get('/register', function (req, res) {
+    res.render('register');
+});
 
+// post req /logincheck and if successful, to question page, if not res.render('login', {error: "Login failed.."})
+app.post("/logincheck", function(req, res){
+    const username = req.body.username;
+    const pw = req.body.password;
+
+    db.all(`SELECT passw FROM accounts WHERE username='${username}'`, (err, rows) => {
+        if (err) {
+            throw err;
+        }
+        if (rows.length == 0){
+            res.render('login', {error: "We coundn't find this account. Please try again!"});
+        }
+        else{
+            if(pw == rows[0].passw){
+                res.render("question");
+            }
+            else{
+                res.render("login", {error: "Username or passwort is not correct. Please try again!"});
+            }
+        }
+    });
+
+});
+
+// post req /signupcheck and if successful, back to log in, if not res.render('register', {error: "Account has been used.."})
+app.post("/signupcheck", function(req, res){
+    const username = req.body.username;
+    const pw = req.body.password;
+    const rePW = req.body.repeat;
+    if(username == "" || pw == "" || rePW == ""){
+        res.render("register", {error: "Please fill in all fields!"});
+    }
+    else{
+        db.all(`SELECT passw FROM accounts WHERE username='${username}'`, (err, rows) =>{
+            if (rows.length != 0){
+                res.render("register", {error: "This username has been used. Please choose another one!"});
+            }
+            if (rows.length == 0){
+                if(pw == rePW){
+                    const sql = `INSERT INTO accounts (username, passw) VALUES ('${username}', '${pw}')`;
+                    db.run(sql, function(err){
+                        const insertedID = this.lastID;
+                        console.log(insertedID);
+                        res.render("login");
+                    });
+                }
+                else{
+                    res.render("register", {error: "Incorrectlz entered password. Please try again!"});
+                }
+            }
+        });
+    }
+});
+
+// get req /question in landing page from guest
 app.get(["/question", "/demo"], function (req, res) {
     // Setup Question page with TDB json
 

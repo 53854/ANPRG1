@@ -2,22 +2,15 @@
 <html>
     <head>
         <title>Login</title>
-        <style>
-            html{
-                background-color: black;
-            }
-            body {
-                color: whitesmoke;
-            }
-        </style>
+        <link rel="stylesheet" href="style.css">
     </head>
     <body>
         <h3>Enter your username and passwort below</h3>
         <form action="/logincheck" method="POST">
             <label for="username">Username:</label><br>
             <input type="text" name="username"><br>
-            <label for="passwort">Password:</label><br>
-            <input type="text" name="passwort"><br>
+            <label for="password">Password:</label><br>
+            <input type="text" name="password"><br>
             <button type="submit">Submit</button>
             <div>
                 <% if (typeof error != "undefined") { %>
