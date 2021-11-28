@@ -5,23 +5,22 @@
         <link rel="stylesheet" href="style.css">
     </head>
     <body>
-        <h3>Enter your username and passwort below</h3>
-        <form action="/logincheck" method="POST">
-            <label for="username">Username:</label><br>
-            <input type="text" name="username"><br>
-            <label for="password">Password:</label><br>
-            <input type="text" name="password"><br>
-            <button type="submit">Submit</button>
+        <div class="container">
+            <h1>Login</h1>
+		<form action="/logincheck" method="POST">
+			<input type="text" placeholder="username" class="field" name="username">
+			<input type="password" placeholder="password" class="field" name="password">
+			<button type="submit" class="btn">submit</button>
+
             <div>
                 <% if (typeof error != "undefined") { %>
                     <%= error %>
                 <% } %>
             </div>
-        </form>
-
-        <h4>You are a new competitor?</h4>
-        <p>
-            <a href="/register">Sign up here</a>
-        </p>
+		</form>
+		<div class="pass-link"> You are a new competitor?
+			<a href="/register" >Sign up here</a>
+		</div>
+        </div>
     </body>
 </html>
