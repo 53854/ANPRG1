@@ -59,6 +59,8 @@ app.post("/logincheck", function (req, res) {
     const username = req.body.username;
     const pw = req.body.password;
 
+    req.session.username = username;
+
     db.all(`SELECT passw FROM accounts WHERE username='${username}'`, (err, rows) => {
         if (err) {
             throw err;
@@ -69,8 +71,8 @@ app.post("/logincheck", function (req, res) {
             });
         } else {
             if (pw == rows[0].passw) {
-                req.session.username = username;
-                res.render("question");
+                req.session.loggedin = true;
+                res.redirect("question");
             } else {
                 res.render("login", {
                     error: "Username or passwort is not correct. Please try again!"
@@ -131,8 +133,22 @@ app.get(["/question", "/demo"], function (req, res) {
             question_arr.push(e.question);
         });
 
+        console.log(req.session.loggedin);
+
+        if (req.session.loggedin) {
+            req.session.question_arr = req.session.question_arr ? req.session.question_arr : question_arr;
+
+            // Store question set in cookie
+        }
+
+        // replace with question set from cookie
+        var question_set = req.session.question_arr ? req.session.question_arr : question_arr;
+
+        var uName = req.session.username ? req.session.username : "Guest";
+
         res.render("question", {
-            arr: question_arr
+            user: uName,
+            arr: question_set
         });
     });
 });
