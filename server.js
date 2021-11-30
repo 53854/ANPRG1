@@ -17,6 +17,10 @@ app.use(session({
     resave: false
 }));
 
+// Initialize cookie-parser module
+const cookieParser = require("cookie-parser");
+app.use(cookieParser());
+
 // Initialize ejs module
 app.engine(".ejs", require("ejs").__express);
 app.set("view engine", "ejs");
@@ -133,18 +137,29 @@ app.get(["/question", "/demo"], function (req, res) {
             question_arr.push(e.question);
         });
 
-        console.log(req.session.loggedin);
-
+        
+         //only logged in users maintain the same question set
         if (req.session.loggedin) {
             req.session.question_arr = req.session.question_arr ? req.session.question_arr : question_arr;
+        } 
+        let question_set = req.session.question_arr ? req.session.question_arr : question_arr;
 
-            // Store question set in cookie
-        }
+        /*  Enable this for cookie storage demo, that way Guest AND users maintain the same question set 
+        // cookie storage for questions set
+        let question_set = req.cookies.question_set ? req.cookies.question_set : question_arr;
+        let question_set_length = question_set.length;
+        let question_set_index = req.cookies.question_set_index ? req.cookies.question_set_index : 0;
+        question_set_index ++; */
 
-        // replace with question set from cookie
-        var question_set = req.session.question_arr ? req.session.question_arr : question_arr;
+        // send cookies with response
+        const maxAge = 3600 * 1000; // one hour
+        res.cookie('question_set', question_set, {"maxAge": maxAge});
+        res.cookie('question_set_length', question_set_length, {"maxAge": maxAge});
+        res.cookie('question_set_index', question_set_index, {"maxAge": maxAge});
 
-        var uName = req.session.username ? req.session.username : "Guest";
+
+        // loged in users are greeted by name
+        let uName = req.session.username ? req.session.username : "Guest";
 
         res.render("question", {
             user: uName,
