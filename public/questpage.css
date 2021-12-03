@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&display=swap');
+
+body{
+    margin: 0;
+    padding: 0;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #080f0f;
+    overflow: hidden;
+    font-family: "Alfa Slab One", cursive;
+}
+
+.question{
+    position: relative;
+    min-height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #a52422;
+    font-size: 30px;
+    transition: 0.5s;
+    margin: 100px;
+}
+.question .text{
+    margin-left: 20px;
+    color: #eff2c0;
+}
+
+.answer{
+    width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-gap: 50px;
+    box-sizing: border-box;
+    color: #fff;
+}
+  
+.answer .box{
+    position: relative;
+    border: 2px solid #eff2c0;
+    min-height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: #eff2c0;
+    font-size: 20px;
+    transition: 0.5s;
+}
+
+.answer .box::before{
+    content: '';
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background: #080f0f;
+    border: 2px solid #eff2c0;
+    box-sizing: border-box;
+    border-left-color: transparent;
+    border-top-color: transparent;
+    transition: 0.5s; 
+    top: -15px;
+    transform: rotate(225deg);
+}
+
+.answer .box:hover,
+.answer .box:hover:before{
+    background: #bea57d;
+    color: #a52422;
+}

@@ -176,3 +176,8 @@ app.get("/test", function (req, res) {
 app.post("/answer", function (req, res) {
     // Answer response and handeling
 });
+
+// get req /questiondemo
+app.get('/questiondemo', function (req, res) {
+    res.render('questiondemo');
+});
