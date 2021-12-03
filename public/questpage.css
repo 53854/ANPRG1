@@ -28,7 +28,7 @@ body{
 }
 
 .answer{
-    width: 1200px;
+    width: 1600px;
     margin: 0 auto;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -48,6 +48,7 @@ body{
     color: #eff2c0;
     font-size: 20px;
     transition: 0.5s;
+    margin-bottom: 250px;
 }
 
 .answer .box::before{
@@ -70,3 +71,13 @@ body{
     background: #bea57d;
     color: #a52422;
 }
+
+.pass-link{
+    color: #bea57d;
+    text-align: center;
+  }
+  .pass-link a:link,
+  .pass-link a:visited{
+    font-size: 16px;
+    color: #a52422;
+  }
