@@ -139,7 +139,7 @@ app.get(["/start", "/startQuizz", "Start"], function (req, res) {
         req.session.sessionScore = 0;
         req.session.currentQuestionSet = question_arr;
 
-        res.render("question", {
+        res.render ("question", {
             uName: uName,
             index: req.session.question_index,
             score: req.session.sessionScore,
@@ -156,8 +156,9 @@ app.post("/answer", function (req, res) {
     const index = parseInt(req.session.question_index);
     const question_arr = req.session.currentQuestionSet;
     const answer = req.body.answer;
-    const correct_answer = question_arr[index].answer;
+    const correct_answer = question_arr[parseInt(req.session.question_index)].correct_answer;
 
+    console.log("answer: " + answer + " | correct_answer: " + correct_answer);
 
 
     // keep user name (for greeting? 🖐)
@@ -172,16 +173,17 @@ app.post("/answer", function (req, res) {
     // render final page if all questions have been answered
     if (req.session.question_index >= question_arr.length) {
         res.render("verdict", {
+            index: parseInt(req.session.question_index),
             score: req.session.sessionScore
         });
     } else {
         res.render("question", {
             uName: uName,
             score: req.session.sessionScore,
-            index: index,
+            index: parseInt(req.session.question_index),
             question_arr: question_arr,
-            question: question_arr[index].question,
-            answers: question_arr[index].incorrect_answers,
+            question: question_arr[parseInt(req.session.question_index)].question,
+            answers: question_arr[parseInt(req.session.question_index)].incorrect_answers,
         });
     }
 });

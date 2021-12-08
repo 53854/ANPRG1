@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Score: <%= score%></title>
+    <title>Question: <%= index +1 %> Score: <%= score%> </title>
     <link rel="stylesheet" href="questpage.css">
 </head>
 
@@ -13,10 +13,10 @@
     </div>
 
     <form class="answer" action="/answer" method="post">
-        <button class="box" name="answer" type="answer" value=<%= answers[0]%>><%= answers[0]%></button>
-        <button class="box" name="answer" type="answer" value=<%= answers[1]%>><%= answers[1]%></button>
-        <button class="box" name="answer" type="answer" value=<%= answers[2]%>><%= answers[2]%></button>
-        <button class="box" name="answer" type="answer" value=<%= answers[3]%>><%= answers[3]%></button>
+        <button class="box" name="answer" type="answer" value='<%= answers[0]%>'><%= answers[0]%></button>
+        <button class="box" name="answer" type="answer" value='<%= answers[1]%>'><%= answers[1]%></button>
+        <button class="box" name="answer" type="answer" value='<%= answers[2]%>'><%= answers[2]%></button>
+        <button class="box" name="answer" type="answer" value='<%= answers[3]%>'><%= answers[3]%></button>
         </form>
 
     <div class="pass-link">
