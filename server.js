@@ -31,14 +31,14 @@ app.use(express.static(__dirname + "views"));
 app.use(express.static("public"));
 
 // connect to the accounts database
-const DATABASE = "accounts.db"
+/* const DATABASE = "accounts.db"
 const sqlite3 = require("sqlite3").verbose();
 const db = new sqlite3.Database(DATABASE, (err) => {
     if (err) {
         console.error(err.message);
     }
     console.log('Connected to the accounts database.');
-});
+}); */
 
 
 // connect to heroku postgres database
