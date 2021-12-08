@@ -115,7 +115,7 @@ app.post("/logincheck", function (req, res) {
             console.log(resp.rows);
             if (pw == resp.rows[0].passw) {
                 req.session.loggedin = true;
-                res.redirect("question");
+                res.render("Start");
             } else {
                 res.render("login", {
                     error: "Username or passwort is not correct. Please try again!"
@@ -179,7 +179,7 @@ app.post("/signupcheck", function (req, res) {
                     });
                 } else {
                     res.render("register", {
-                        error: "Incorrectlz entered password. Please try again!"
+                        error: "Incorrectly entered password. Please try again!"
                     });
                 }
             }
