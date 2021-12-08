@@ -28,7 +28,7 @@ body{
 }
 
 .answer{
-    width: 1600px;
+    width: 1200px;
     margin: 0 auto;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -48,7 +48,7 @@ body{
     color: #eff2c0;
     font-size: 20px;
     transition: 0.5s;
-    margin-bottom: 250px;
+    margin-bottom: 50px;
 }
 
 .answer .box::before{
