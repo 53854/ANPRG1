@@ -103,17 +103,17 @@ app.post("/logincheck", function (req, res) {
     }); */
 
 
-    client.query(`SELECT passw FROM accounts WHERE username='${username}'`, (err, rows) => {
+    client.query(`SELECT passw FROM accounts WHERE username='${username}'`, (err, resp) => {
         if (err) {
             throw err;
         }
-        if (rows.length == 0) {
+        if (resp.rows.length == 0) {
             res.render('login', {
                 error: "We coundn't find this account. Please try again!"
             });
         } else {
-            console.log(rows);
-            if (pw == rows[0].passw) {
+            console.log(resp.rows);
+            if (pw == resp.rows[0].passw) {
                 req.session.loggedin = true;
                 res.redirect("question");
             } else {
