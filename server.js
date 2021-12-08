@@ -92,7 +92,7 @@ app.post("/logincheck", function (req, res) {
             console.log(resp.rows);
             if (pw == resp.rows[0].passw) {
                 req.session.loggedin = true;
-                res.render("Start");
+                res.redirect("/start");
             } else {
                 res.render("login", {
                     error: "Username or passwort is not correct. Please try again!"
