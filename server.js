@@ -40,8 +40,21 @@ const db = new sqlite3.Database(DATABASE, (err) => {
     console.log('Connected to the accounts database.');
 });
 
+
+// connect to heroku postgres database
+const { Client } = require('pg');
+
+const client = new Client({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
+
+client.connect();
+
 // Start server
-app.listen(3000, function () {
+app.listen(process.env.PORT || 3000, function () {
     console.log("Server started on port 3000");
 });
 
