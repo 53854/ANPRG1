@@ -80,29 +80,6 @@ app.post("/logincheck", function (req, res) {
 
     req.session.username = username;
 
-    /* Old Sqlite 
-    
-    db.all(`SELECT passw FROM accounts WHERE username='${username}'`, (err, rows) => {
-        if (err) {
-            throw err;
-        }
-        if (rows.length == 0) {
-            res.render('login', {
-                error: "We coundn't find this account. Please try again!"
-            });
-        } else {
-            if (pw == rows[0].passw) {
-                req.session.loggedin = true;
-                res.redirect("question");
-            } else {
-                res.render("login", {
-                    error: "Username or passwort is not correct. Please try again!"
-                });
-            }
-        }
-    }); */
-
-
     client.query(`SELECT passw FROM accounts WHERE username='${username}'`, (err, resp) => {
         if (err) {
             throw err;
@@ -137,31 +114,6 @@ app.post("/signupcheck", function (req, res) {
             error: "Please fill in all fields!"
         });
     } else {
-
-        /*  Old Sqlite
-                db.all(`SELECT passw FROM accounts WHERE username='${username}'`, (err, rows) => {
-                    if (rows.length != 0) {
-                        res.render("register", {
-                            error: "This username has been used. Please choose another one!"
-                        });
-                    }
-                    if (rows.length == 0) {
-                        if (pw == rePW) {
-                            const sql = `INSERT INTO accounts (username, passw) VALUES ('${username}', '${pw}')`;
-                            db.run(sql, function (err) {
-                                const insertedID = this.lastID;
-                                //console.log(insertedID);
-                                res.render("login");
-                            });
-                        } else {
-                            res.render("register", {
-                                error: "Incorrectlz entered password. Please try again!"
-                            });
-                        }
-                    }
-                });  
-        */
-
 
         client.query(`SELECT passw FROM accounts WHERE username='${username}'`, (err, rows) => {
             if (rows.length != 0) {
@@ -278,19 +230,6 @@ app.get(["/demo_question_list", "/demo"], function (req, res) {
             req.session.question_arr = req.session.question_arr ? req.session.question_arr : question_arr;
         }
         let question_set = req.session.question_arr ? req.session.question_arr : question_arr;
-
-        /*  Enable this for cookie storage demo, that way Guest AND users maintain the same question set 
-        // cookie storage for questions set
-        let question_set = req.cookies.question_set ? req.cookies.question_set : question_arr;
-        let question_set_length = question_set.length;
-        let question_set_index = req.cookies.question_set_index ? req.cookies.question_set_index : 0;
-        question_set_index ++; */
-
-        // send cookies with response
-        /*  const maxAge = 3600 * 1000; // one hour
-         res.cookie('question_set', question_set, {"maxAge": maxAge});
-         res.cookie('question_set_length', question_set_length, {"maxAge": maxAge});
-         res.cookie('question_set_index', question_set_index, {"maxAge": maxAge}); */
 
 
         // loged in users are greeted by name
