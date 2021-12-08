@@ -115,7 +115,8 @@ app.post("/signupcheck", function (req, res) {
         });
     } else {
 
-        client.query(`SELECT passw FROM accounts WHERE username='${username}'`, (err, resp) => {
+        client.query(`SELECT * FROM accounts WHERE username='${username}'`, (err, resp) => {
+            console.log(resp);
             if (resp.rows.length != 0) {
                 res.render("register", {
                     error: "This username has been used. Please choose another one!"
