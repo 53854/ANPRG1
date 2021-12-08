@@ -89,7 +89,6 @@ app.post("/logincheck", function (req, res) {
                 error: "We coundn't find this account. Please try again!"
             });
         } else {
-            console.log(resp.rows);
             if (pw == resp.rows[0].passw) {
                 req.session.loggedin = true;
                 res.redirect("/start");
@@ -116,18 +115,16 @@ app.post("/signupcheck", function (req, res) {
     } else {
 
         client.query(`SELECT * FROM accounts WHERE username='${username}'`, (err, resp) => {
-            console.log(resp);
-            if (resp.rows.length != 0) {
+            if (resp.rowsCount != 0) {
                 res.render("register", {
                     error: "This username has been used. Please choose another one!"
                 });
             }
-            if (resp.rows.length == 0) {
+            if (resp.rowsCount == 0) {
                 if (pw == rePW) {
                     const sql = `INSERT INTO accounts (username, passw) VALUES ('${username}', '${pw}')`;
                     client.query(sql, function (err) {
                         const insertedID = this.lastID;
-                        //console.log(insertedID);
                         res.render("login");
                     });
                 } else {
