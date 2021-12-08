@@ -133,7 +133,9 @@ function parseTDBQuestion(q_json) {
     q_json.incorrect_answers.push(temp);
 
     q_json.incorrect_answers.forEach(a => {
-        a = a.replace(chars[c][1], chars[c][0]);
+        for (var c = 0; c < chars.length; c++) {
+            a = a.replace(chars[c][1], chars[c][0]);
+        }
     });
 
 
