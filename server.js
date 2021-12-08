@@ -112,6 +112,7 @@ app.post("/logincheck", function (req, res) {
                 error: "We coundn't find this account. Please try again!"
             });
         } else {
+            console.log(rows[0]);
             if (pw == rows[0].passw) {
                 req.session.loggedin = true;
                 res.redirect("question");
