@@ -42,13 +42,15 @@ const db = new sqlite3.Database(DATABASE, (err) => {
 
 
 // connect to heroku postgres database
-const { Client } = require('pg');
+const {
+    Client
+} = require('pg');
 
 const client = new Client({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false
-  }
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+        rejectUnauthorized: false
+    }
 });
 
 client.connect();
@@ -78,6 +80,8 @@ app.post("/logincheck", function (req, res) {
 
     req.session.username = username;
 
+    /* Old Sqlite 
+    
     db.all(`SELECT passw FROM accounts WHERE username='${username}'`, (err, rows) => {
         if (err) {
             throw err;
@@ -96,6 +100,28 @@ app.post("/logincheck", function (req, res) {
                 });
             }
         }
+    }); */
+
+
+    client.query(`SELECT passw FROM accounts WHERE username='${username}'`, (err, rows) => {
+        if (err) {
+            throw err;
+        }
+        if (rows.length == 0) {
+            res.render('login', {
+                error: "We coundn't find this account. Please try again!"
+            });
+        } else {
+            if (pw == rows[0].passw) {
+                req.session.loggedin = true;
+                res.redirect("question");
+            } else {
+                res.render("login", {
+                    error: "Username or passwort is not correct. Please try again!"
+                });
+            }
+        }
+        client.end();
     });
 
 });
@@ -110,7 +136,33 @@ app.post("/signupcheck", function (req, res) {
             error: "Please fill in all fields!"
         });
     } else {
-        db.all(`SELECT passw FROM accounts WHERE username='${username}'`, (err, rows) => {
+
+        /*  Old Sqlite
+                db.all(`SELECT passw FROM accounts WHERE username='${username}'`, (err, rows) => {
+                    if (rows.length != 0) {
+                        res.render("register", {
+                            error: "This username has been used. Please choose another one!"
+                        });
+                    }
+                    if (rows.length == 0) {
+                        if (pw == rePW) {
+                            const sql = `INSERT INTO accounts (username, passw) VALUES ('${username}', '${pw}')`;
+                            db.run(sql, function (err) {
+                                const insertedID = this.lastID;
+                                //console.log(insertedID);
+                                res.render("login");
+                            });
+                        } else {
+                            res.render("register", {
+                                error: "Incorrectlz entered password. Please try again!"
+                            });
+                        }
+                    }
+                });  
+        */
+
+
+        client.query(`SELECT passw FROM accounts WHERE username='${username}'`, (err, rows) => {
             if (rows.length != 0) {
                 res.render("register", {
                     error: "This username has been used. Please choose another one!"
@@ -119,7 +171,7 @@ app.post("/signupcheck", function (req, res) {
             if (rows.length == 0) {
                 if (pw == rePW) {
                     const sql = `INSERT INTO accounts (username, passw) VALUES ('${username}', '${pw}')`;
-                    db.run(sql, function (err) {
+                    client.query(sql, function (err) {
                         const insertedID = this.lastID;
                         //console.log(insertedID);
                         res.render("login");
@@ -130,6 +182,7 @@ app.post("/signupcheck", function (req, res) {
                     });
                 }
             }
+            client.end();
         });
     }
 });
@@ -152,7 +205,7 @@ app.get(["/start", "/startQuizz", "Start"], function (req, res) {
         req.session.sessionScore = 0;
         req.session.currentQuestionSet = question_arr;
 
-        res.render ("question", {
+        res.render("question", {
             uName: uName,
             index: req.session.question_index,
             score: req.session.sessionScore,
@@ -181,7 +234,7 @@ app.post("/answer", function (req, res) {
     if (answer == correct_answer) req.session.sessionScore++;
 
     // Increment index before sending new question
-    req.session.question_index ++;
+    req.session.question_index++;
 
     // render final page if all questions have been answered
     if (req.session.question_index >= question_arr.length) {
