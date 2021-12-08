@@ -2,33 +2,27 @@
 <html>
 
 <head>
-    <title>Quezz</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Score: <%= score%></title>
+    <link rel="stylesheet" href="questpage.css">
 </head>
 
 <body>
+    <% if (question_arr && question_arr.length) { %>
+    <div class="question"> Q:
+        <div class="text"><%= question%>.</div>
+    </div>
 
-    <form action="/test" method="POST">
-        <button type="submit" class="btn btn-primary">test</button>
-    </form>
+    <form class="answer" action="/answer" method="post">
+        <button class="box" name="answer" type="answer" value=<%= answers[0]%>><%= answers[0]%></button>
+        <button class="box" name="answer" type="answer" value=<%= answers[1]%>><%= answers[1]%></button>
+        <button class="box" name="answer" type="answer" value=<%= answers[2]%>><%= answers[2]%></button>
+        <button class="box" name="answer" type="answer" value=<%= answers[3]%>><%= answers[3]%></button>
+        </form>
 
-    <section>
-        <h1>TESTI QUESTIES</h1>
-        <h2>WELCOME <%= user%> </h2>
-        <!-- 
-                    Loop through recieved questions array
-                    Parsed in server.js
-                -->
-        <% if (arr && arr.length) { %>
-        <ul>
-            <!-- Generating li items per question (str in arr)-->
-            <% arr.forEach((item) => { %>
-            <li><%= item %></li>
-            <% }) %>
-        </ul>
-        <% } %>
-    </section>
-
+    <div class="pass-link">
+        <a href="/landing">Back to Homepage</a>
+    </div>
+    <% } %>
 </body>
 
 </html>

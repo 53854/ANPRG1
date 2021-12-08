@@ -132,6 +132,11 @@ function parseTDBQuestion(q_json) {
     // readding incorrect answers
     q_json.incorrect_answers.push(temp);
 
+    q_json.incorrect_answers.forEach(a => {
+        a = a.replace(chars[c][1], chars[c][0]);
+    });
+
+
     return q_json;
 }
 
@@ -159,6 +164,8 @@ function getQuiz(questions_amount = 10, category_ID = "") {
                 parsed.results.forEach(element => {
                     questions.push(parseTDBQuestion(element));
                 });
+
+                //console.log(parsed.results);
 
                 resolve(parsed.results);
             });

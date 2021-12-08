@@ -72,6 +72,13 @@ body{
     color: #a52422;
 }
 
+button{
+    text-align: center;
+    font-family: "Alfa Slab One", cursive;
+    font-size: 20px;
+    background-color: transparent;
+}
+
 .pass-link{
     color: #bea57d;
     text-align: center;

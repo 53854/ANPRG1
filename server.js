@@ -108,7 +108,7 @@ app.post("/signupcheck", function (req, res) {
                     const sql = `INSERT INTO accounts (username, passw) VALUES ('${username}', '${pw}')`;
                     db.run(sql, function (err) {
                         const insertedID = this.lastID;
-                        console.log(insertedID);
+                        //console.log(insertedID);
                         res.render("login");
                     });
                 } else {
@@ -121,8 +121,74 @@ app.post("/signupcheck", function (req, res) {
     }
 });
 
+
+app.get(["/start", "/startQuizz", "Start"], function (req, res) {
+
+    quiz.getQuiz(10).then(function (quiz_set) {
+        // loged in users are greeted by name
+        let uName = req.session.username ? req.session.username : "Guest";
+
+        // Generate questions for user
+        var question_arr = [];
+        quiz_set.forEach(e => {
+            question_arr.push(e);
+        });
+
+        // initialize question index cookie
+        req.session.question_index = 0;
+        req.session.sessionScore = 0;
+        req.session.currentQuestionSet = question_arr;
+
+        res.render("question", {
+            uName: uName,
+            index: req.session.question_index,
+            score: req.session.sessionScore,
+            question_arr: req.session.currentQuestionSet,
+            question: req.session.currentQuestionSet[req.session.question_index].question,
+            answers: req.session.currentQuestionSet[req.session.question_index].incorrect_answers,
+        });
+    });
+});
+
+
+app.post("/answer", function (req, res) {
+    // Question elements for answer eval and next question
+    const index = parseInt(req.session.question_index);
+    const question_arr = req.session.currentQuestionSet;
+    const answer = req.body.answer;
+    const correct_answer = question_arr[index].answer;
+
+
+
+    // keep user name (for greeting? 🖐)
+    const uName = req.session.username ? req.session.username : "Guest";
+
+    // Evaluate answer
+    if (answer == correct_answer) req.session.sessionScore++;
+
+    // Increment index before sending new question
+    req.session.question_index ++;
+
+    // render final page if all questions have been answered
+    if (req.session.question_index >= question_arr.length) {
+        res.render("verdict", {
+            score: req.session.sessionScore
+        });
+    } else {
+        res.render("question", {
+            uName: uName,
+            score: req.session.sessionScore,
+            index: index,
+            question_arr: question_arr,
+            question: question_arr[index].question,
+            answers: question_arr[index].incorrect_answers,
+        });
+    }
+});
+
+
 // get req /question in landing page from guest
-app.get(["/question", "/demo"], function (req, res) {
+app.get(["/demo_question_list", "/demo"], function (req, res) {
     // Setup Question page with TDB json
 
     // on start quiz handle quiz generation and management
@@ -137,11 +203,11 @@ app.get(["/question", "/demo"], function (req, res) {
             question_arr.push(e.question);
         });
 
-        
-         //only logged in users maintain the same question set
+
+        //only logged in users maintain the same question set
         if (req.session.loggedin) {
             req.session.question_arr = req.session.question_arr ? req.session.question_arr : question_arr;
-        } 
+        }
         let question_set = req.session.question_arr ? req.session.question_arr : question_arr;
 
         /*  Enable this for cookie storage demo, that way Guest AND users maintain the same question set 
@@ -152,25 +218,27 @@ app.get(["/question", "/demo"], function (req, res) {
         question_set_index ++; */
 
         // send cookies with response
-        const maxAge = 3600 * 1000; // one hour
-        res.cookie('question_set', question_set, {"maxAge": maxAge});
-        res.cookie('question_set_length', question_set_length, {"maxAge": maxAge});
-        res.cookie('question_set_index', question_set_index, {"maxAge": maxAge});
+        /*  const maxAge = 3600 * 1000; // one hour
+         res.cookie('question_set', question_set, {"maxAge": maxAge});
+         res.cookie('question_set_length', question_set_length, {"maxAge": maxAge});
+         res.cookie('question_set_index', question_set_index, {"maxAge": maxAge}); */
 
 
         // loged in users are greeted by name
         let uName = req.session.username ? req.session.username : "Guest";
 
-        res.render("question", {
+        //console.log(question_set);
+
+        res.render("demo_question_list", {
             user: uName,
-            arr: question_set
+            arr: question_set,
         });
     });
 });
 
 app.get("/test", function (req, res) {
-    console.log("test button clicked");
-    res.render("question");
+    //console.log("test button clicked");
+    res.render("demo_question_list");
 });
 
 app.post("/answer", function (req, res) {
