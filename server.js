@@ -115,13 +115,13 @@ app.post("/signupcheck", function (req, res) {
         });
     } else {
 
-        client.query(`SELECT passw FROM accounts WHERE username='${username}'`, (err, rows) => {
-            if (rows.length != 0) {
+        client.query(`SELECT passw FROM accounts WHERE username='${username}'`, (err, resp) => {
+            if (resp.rows.length != 0) {
                 res.render("register", {
                     error: "This username has been used. Please choose another one!"
                 });
             }
-            if (rows.length == 0) {
+            if (resp.rows.length == 0) {
                 if (pw == rePW) {
                     const sql = `INSERT INTO accounts (username, passw) VALUES ('${username}', '${pw}')`;
                     client.query(sql, function (err) {
