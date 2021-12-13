@@ -139,7 +139,7 @@ app.post("/signupcheck", function (req, res) {
 });
 
 
-app.get(["/start", "/startQuizz", "Start"], function (req, res) {
+app.get(["/start", "/startQuizz", "start"], function (req, res) {
 
     quiz.getQuiz(10).then(function (quiz_set) {
         // loged in users are greeted by name
@@ -206,7 +206,7 @@ app.post("/answer", function (req, res) {
 });
 
 
-// get req /question in landing page from guest
+/* // get req /question in landing page from guest
 app.get(["/demo_question_list", "/demo"], function (req, res) {
     // Setup Question page with TDB json
 
@@ -240,9 +240,9 @@ app.get(["/demo_question_list", "/demo"], function (req, res) {
             arr: question_set,
         });
     });
-});
+}); */
 
-app.get("/test", function (req, res) {
+/* app.get("/test", function (req, res) {
     //console.log("test button clicked");
     res.render("demo_question_list");
 });
@@ -254,4 +254,4 @@ app.post("/answer", function (req, res) {
 // get req /questiondemo
 app.get('/questiondemo', function (req, res) {
     res.render('questiondemo');
-});
+}); */
