@@ -1,21 +1,26 @@
-// TODO: Cleanup and sort 
 const quiz = require("./quizzz");
+
 const express = require("express");
 const app = express();
 
 // Initialize body and json parsing
-app.use(express.urlencoded({
-    extended: true
-}));
+app.use(
+    express.urlencoded({
+        extended: true,
+    })
+);
 app.use(express.json());
 
 // Initialize express session module
-const session = require('express-session');
-app.use(session({
-    secret: 'keyboard cat',
-    saveUninitialized: false,
-    resave: false
-}));
+const session = require("express-session");
+app.use(
+    session({
+        //! FOR DEMO ONLY - DO NOT USE IN PRODUCTION
+        secret: "keyboard cat",
+        saveUninitialized: false,
+        resave: false,
+    })
+);
 
 // Initialize cookie-parser module
 const cookieParser = require("cookie-parser");
@@ -25,32 +30,28 @@ app.use(cookieParser());
 app.engine(".ejs", require("ejs").__express);
 app.set("view engine", "ejs");
 
-
 // Make public directory available to the server
 app.use(express.static(__dirname + "views"));
 app.use(express.static("public"));
 
-// connect to the accounts database
+// Removing local sqlite3 database in favour of heroku postgresql db
 /* const DATABASE = "accounts.db"
-const sqlite3 = require("sqlite3").verbose();
-const db = new sqlite3.Database(DATABASE, (err) => {
-    if (err) {
-        console.error(err.message);
-    }
-    console.log('Connected to the accounts database.');
-}); */
-
+ const sqlite3 = require("sqlite3").verbose();
+ const db = new sqlite3.Database(DATABASE, (err) => {
+     if (err) {
+         console.error(err.message);
+     }
+     console.log('Connected to the accounts database.');
+ }); */
 
 // connect to heroku postgres database
-const {
-    Client
-} = require('pg');
+const { Client } = require("pg");
 
 const client = new Client({
     connectionString: process.env.DATABASE_URL,
     ssl: {
-        rejectUnauthorized: false
-    }
+        rejectUnauthorized: false,
+    },
 });
 
 client.connect();
@@ -61,16 +62,16 @@ app.listen(process.env.PORT || 3000, function () {
 });
 
 app.get(["/", "/index", "/landing"], function (req, res) {
-    res.render('landing');
+    res.render("landing");
 });
 
 // get req /login
-app.get('/login', function (req, res) {
-    res.render('login');
+app.get("/login", function (req, res) {
+    res.render("login");
 });
 // get req /register
-app.get('/register', function (req, res) {
-    res.render('register');
+app.get("/register", function (req, res) {
+    res.render("register");
 });
 
 // post req /logincheck and if successful, to question page, if not res.render('login', {error: "Login failed.."})
@@ -80,27 +81,29 @@ app.post("/logincheck", function (req, res) {
 
     req.session.username = username;
 
-    client.query(`SELECT passw FROM accounts WHERE username='${username}'`, (err, resp) => {
-        if (err) {
-            throw err;
-        }
-        if (resp.rows.length == 0) {
-            res.render('login', {
-                error: "We coundn't find this account. Please try again!"
-            });
-        } else {
-            if (pw == resp.rows[0].passw) {
-                req.session.loggedin = true;
-                res.redirect("/start");
-            } else {
-                res.render("login", {
-                    error: "Username or passwort is not correct. Please try again!"
-                });
+    client.query(
+        `SELECT passw FROM accounts WHERE username='${username}'`,
+        (err, resp) => {
+            if (err) {
+                throw err;
             }
+            if (resp.rows.length == 0) {
+                res.render("login", {
+                    error: "We coundn't find this account. Please try again!",
+                });
+            } else {
+                if (pw == resp.rows[0].passw) {
+                    req.session.loggedin = true;
+                    res.redirect("/start");
+                } else {
+                    res.render("login", {
+                        error: "Username or passwort is not correct. Please try again!",
+                    });
+                }
+            }
+            client.end();
         }
-        client.end();
-    });
-
+    );
 });
 
 // post req /signupcheck and if successful, back to log in, if not res.render('register', {error: "Account has been used.."})
@@ -110,44 +113,44 @@ app.post("/signupcheck", function (req, res) {
     const rePW = req.body.repeat;
     if (username == "" || pw == "" || rePW == "") {
         res.render("register", {
-            error: "Please fill in all fields!"
+            error: "Please fill in all fields!",
         });
     } else {
-
-        client.query(`SELECT * FROM accounts WHERE username='${username}'`, (err, resp) => {
-            if (resp.rowsCount != 0) {
-                res.render("register", {
-                    error: "This username has been used. Please choose another one!"
-                });
-            }
-            if (resp.rowsCount == 0) {
-                if (pw == rePW) {
-                    const sql = `INSERT INTO accounts (username, passw) VALUES ('${username}', '${pw}')`;
-                    client.query(sql, function (err) {
-                        const insertedID = this.lastID;
-                        res.render("login");
-                    });
-                } else {
+        client.query(
+            `SELECT * FROM accounts WHERE username='${username}'`,
+            (err, resp) => {
+                if (resp.rowsCount != 0) {
                     res.render("register", {
-                        error: "Incorrectly entered password. Please try again!"
+                        error: "This username has been used. Please choose another one!",
                     });
                 }
+                if (resp.rowsCount == 0) {
+                    if (pw == rePW) {
+                        const sql = `INSERT INTO accounts (username, passw) VALUES ('${username}', '${pw}')`;
+                        client.query(sql, function (err) {
+                            const insertedID = this.lastID;
+                            res.render("login");
+                        });
+                    } else {
+                        res.render("register", {
+                            error: "Incorrectly entered password. Please try again!",
+                        });
+                    }
+                }
+                client.end();
             }
-            client.end();
-        });
+        );
     }
 });
 
-
 app.get(["/start", "/startQuizz", "start"], function (req, res) {
-
     quiz.getQuiz(10).then(function (quiz_set) {
         // loged in users are greeted by name
         let uName = req.session.username ? req.session.username : "Guest";
 
         // Generate questions for user
         var question_arr = [];
-        quiz_set.forEach(e => {
+        quiz_set.forEach((e) => {
             question_arr.push(e);
         });
 
@@ -161,22 +164,24 @@ app.get(["/start", "/startQuizz", "start"], function (req, res) {
             index: req.session.question_index,
             score: req.session.sessionScore,
             question_arr: req.session.currentQuestionSet,
-            question: req.session.currentQuestionSet[req.session.question_index].question,
-            answers: req.session.currentQuestionSet[req.session.question_index].incorrect_answers,
+            question:
+                req.session.currentQuestionSet[req.session.question_index].question,
+            answers:
+                req.session.currentQuestionSet[req.session.question_index]
+                    .incorrect_answers,
         });
     });
 });
-
 
 app.post("/answer", function (req, res) {
     // Question elements for answer eval and next question
     const index = parseInt(req.session.question_index);
     const question_arr = req.session.currentQuestionSet;
     const answer = req.body.answer;
-    const correct_answer = question_arr[parseInt(req.session.question_index)].correct_answer;
+    const correct_answer =
+        question_arr[parseInt(req.session.question_index)].correct_answer;
 
     console.log("answer: " + answer + " | correct_answer: " + correct_answer);
-
 
     // keep user name (for greeting? 🖐)
     const uName = req.session.username ? req.session.username : "Guest";
@@ -191,7 +196,7 @@ app.post("/answer", function (req, res) {
     if (req.session.question_index >= question_arr.length) {
         res.render("verdict", {
             index: parseInt(req.session.question_index),
-            score: req.session.sessionScore
+            score: req.session.sessionScore,
         });
     } else {
         res.render("question", {
@@ -200,58 +205,58 @@ app.post("/answer", function (req, res) {
             index: parseInt(req.session.question_index),
             question_arr: question_arr,
             question: question_arr[parseInt(req.session.question_index)].question,
-            answers: question_arr[parseInt(req.session.question_index)].incorrect_answers,
+            answers:
+                question_arr[parseInt(req.session.question_index)].incorrect_answers,
         });
     }
 });
 
-
 /* // get req /question in landing page from guest
-app.get(["/demo_question_list", "/demo"], function (req, res) {
-    // Setup Question page with TDB json
+ app.get(["/demo_question_list", "/demo"], function (req, res) {
+     // Setup Question page with TDB json
 
-    // on start quiz handle quiz generation and management
-    quiz.getQuiz(10).then(function (quiz_set) {
+     // on start quiz handle quiz generation and management
+     quiz.getQuiz(10).then(function (quiz_set) {
 
-        // use session cookie for question set storage?
-        // or use a database?
+         // use session cookie for question set storage?
+         // or use a database?
 
-        var question_arr = [];
+         var question_arr = [];
 
-        quiz_set.forEach(e => {
-            question_arr.push(e.question);
-        });
-
-
-        //only logged in users maintain the same question set
-        if (req.session.loggedin) {
-            req.session.question_arr = req.session.question_arr ? req.session.question_arr : question_arr;
-        }
-        let question_set = req.session.question_arr ? req.session.question_arr : question_arr;
+         quiz_set.forEach(e => {
+             question_arr.push(e.question);
+         });
 
 
-        // loged in users are greeted by name
-        let uName = req.session.username ? req.session.username : "Guest";
+         //only logged in users maintain the same question set
+         if (req.session.loggedin) {
+             req.session.question_arr = req.session.question_arr ? req.session.question_arr : question_arr;
+         }
+         let question_set = req.session.question_arr ? req.session.question_arr : question_arr;
 
-        //console.log(question_set);
 
-        res.render("demo_question_list", {
-            user: uName,
-            arr: question_set,
-        });
-    });
-}); */
+         // loged in users are greeted by name
+         let uName = req.session.username ? req.session.username : "Guest";
+
+         //console.log(question_set);
+
+         res.render("demo_question_list", {
+             user: uName,
+             arr: question_set,
+         });
+     });
+ }); */
 
 /* app.get("/test", function (req, res) {
-    //console.log("test button clicked");
-    res.render("demo_question_list");
-});
+     //console.log("test button clicked");
+     res.render("demo_question_list");
+ });
 
-app.post("/answer", function (req, res) {
-    // Answer response and handeling
-});
+ app.post("/answer", function (req, res) {
+     // Answer response and handeling
+ });
 
-// get req /questiondemo
-app.get('/questiondemo', function (req, res) {
-    res.render('questiondemo');
-}); */
+ // get req /questiondemo
+ app.get('/questiondemo', function (req, res) {
+     res.render('questiondemo');
+ }); */
