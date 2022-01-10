@@ -34,16 +34,6 @@ app.set("view engine", "ejs");
 app.use(express.static(__dirname + "views"));
 app.use(express.static("public"));
 
-// Removing local sqlite3 database in favour of heroku postgresql db
-/* const DATABASE = "accounts.db"
- const sqlite3 = require("sqlite3").verbose();
- const db = new sqlite3.Database(DATABASE, (err) => {
-     if (err) {
-         console.error(err.message);
-     }
-     console.log('Connected to the accounts database.');
- }); */
-
 // connect to heroku postgres database
 const { Client } = require("pg");
 
@@ -61,15 +51,17 @@ app.listen(process.env.PORT || 3000, function () {
     console.log("Server started on port 3000");
 });
 
+// Render Landing
 app.get(["/", "/index", "/landing"], function (req, res) {
     res.render("landing");
 });
 
-// get req /login
+// Render Login page
 app.get("/login", function (req, res) {
     res.render("login");
 });
-// get req /register
+
+// Render register page
 app.get("/register", function (req, res) {
     res.render("register");
 });
@@ -107,6 +99,7 @@ app.post("/logincheck", function (req, res) {
 });
 
 // post req /signupcheck and if successful, back to log in, if not res.render('register', {error: "Account has been used.."})
+// TODO: check for invaid entries
 app.post("/signupcheck", function (req, res) {
     const username = req.body.username;
     const pw = req.body.password;
@@ -211,7 +204,11 @@ app.post("/answer", function (req, res) {
     }
 });
 
-/* // get req /question in landing page from guest
+
+//* #############################################################################
+/* ##############################  Deprecated  ##################################
+
+// get req /question in landing page from guest
  app.get(["/demo_question_list", "/demo"], function (req, res) {
      // Setup Question page with TDB json
 
@@ -245,9 +242,9 @@ app.post("/answer", function (req, res) {
              arr: question_set,
          });
      });
- }); */
+ });
 
-/* app.get("/test", function (req, res) {
+app.get("/test", function (req, res) {
      //console.log("test button clicked");
      res.render("demo_question_list");
  });
@@ -259,4 +256,14 @@ app.post("/answer", function (req, res) {
  // get req /questiondemo
  app.get('/questiondemo', function (req, res) {
      res.render('questiondemo');
+ });
+
+// Removing local sqlite3 database in favour of heroku postgresql db
+const DATABASE = "accounts.db"
+ const sqlite3 = require("sqlite3").verbose();
+ const db = new sqlite3.Database(DATABASE, (err) => {
+     if (err) {
+         console.error(err.message);
+     }
+     console.log('Connected to the accounts database.');
  }); */
