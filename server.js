@@ -100,6 +100,7 @@ app.post("/logincheck", function (req, res) {
 
 // post req /signupcheck and if successful, back to log in, if not res.render('register', {error: "Account has been used.."})
 // TODO: check for invaid entries
+// !! SIGNUP BROKEN 🤯
 app.post("/signupcheck", function (req, res) {
     const username = req.body.username;
     const pw = req.body.password;
