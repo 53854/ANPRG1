@@ -1,0 +1,37 @@
+body {
+    height: 100%;
+    font-family: sans-serif;
+    color: aliceblue;
+    background-color: black;
+}
+
+.finkenau {
+    background-image: url("/img/Finkenau-min.jpg");
+    height: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.center {
+    margin: auto;
+    width: 50%;
+    text-align: center;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+}
+
+.fancy {
+    border-style: outset;
+    border-width: 7px;
+    border-color: gold;
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}

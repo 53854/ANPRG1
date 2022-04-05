@@ -1,0 +1,150 @@
+@import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&display=swap');
+
+body{
+  background-color: #080f0f;
+  font-family: "Alfa Slab One", cursive;
+  padding: 0;
+  margin: 0;
+  max-width: 100%;
+}
+
+.curved-header{
+  position: relative;
+  width: 100%;
+  height: 50vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.curved-header:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 70%;
+  background: linear-gradient(#a4bab7, #a52422);
+  border-radius: 0 0 100% 100%;
+  transform: scale(1.5);
+}
+
+.curved-header .content {
+  position: relative;
+  z-index: 1;
+  margin: 0 auto;
+  max-width: 900px;
+  text-align: center;
+}
+
+.curved-header .content h2 {
+  margin: 0;
+  padding: 0;
+  color: #eff2c0;
+  font-size: 10em;
+}
+
+.choice-option{
+  text-align: center;
+  padding: 120px;
+}
+.choice-option .box-question {
+  position: relative;
+  border: 3px solid #eff2c0;
+  min-height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #eff2c0;
+  margin-bottom: 20px;
+  font-size: 28px;
+  transition: 0.5s;
+}
+
+.choice-option .box-choice {
+  position: relative;
+  border: 3px solid #eff2c0;
+  min-height: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #eff2c0;
+  margin: 20px;
+  font-size: 22px;
+  transition: 0.5s;
+}
+
+.choice-option .box-choice:hover{
+  background: #bea57d;
+}
+
+h4{
+  color: #eff2c0;
+  margin-bottom: 20px;
+}
+
+.box-choice a:link,
+.box-choice a:visited{
+  color: #a52422;
+}
+
+.container{
+  margin: 20px auto;
+  padding: 10px;
+  width: 500px;
+  height: 500px;
+  background-color: #252525;
+  border-radius: 5px;
+}
+ h1{
+  width: 70%;
+  color: #eff2c0;
+  font-size: 40px;
+  margin: 28px auto;
+  margin-bottom: 20px;
+  text-align: center;
+  padding-top: 40px;
+}
+form{
+  padding: 30px;
+  text-align: center;
+}
+input, button{
+  padding: 12px 0;
+  margin-bottom: 10px;
+  border-radius: 3px;
+  border: 2px solid transparent;
+  text-align: center;
+  width: 90%;
+  font-size: 16px;
+  transition: border .2s, background-color .2s;
+}
+form .field{
+  background-color: rgb(204, 205, 206);
+}
+form .field:focus {
+  border: 2px solid #028090;
+}
+form .btn{
+  background-color: rgb(0, 177, 212);
+  color: #fff;
+  line-height: 25px;
+  cursor: pointer;
+}
+form .btn:hover,
+form .btn:active {
+  background-color: #028090;
+  border: 2px solid  rgb(3, 127, 151);
+}
+.pass-link{
+  color: #bea57d;
+  text-align: center;
+}
+.pass-link a:link,
+.pass-link a:visited{
+  font-size: 16px;
+  color: #a52422;
+}
+section{
+  color: #bea57d;
+}

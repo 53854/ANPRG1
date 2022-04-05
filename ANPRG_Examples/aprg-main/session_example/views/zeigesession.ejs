@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Sessionvariable</title>
+    </head>
+    <body>
+        <h1>Werte der Sessionvariablen: <%= message%></h1>
+        <h2>SessionID: <%= sessionID %></h2>
+
+        <form action="/sessionSetzen" method="POST">
+            neue Werte: 
+            <input type="text" name="sessionValue1">
+            <input type="text" name="sessionValue2">
+            <input type="text" name="sessionValue3">
+            <button type="submit">Sessionvariablen setzen</button>
+        </form>
+        <a href="/sessionLoeschen">Sessionvariable löschen</a>
+    </body>
+</html>

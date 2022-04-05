@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Create a new account</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <div class="container">
+            <h1>Sign up</h1>
+		<form action="/signupcheck" method="POST">
+			<input type="text" placeholder="username" class="field" name="username">
+			<input type="password" placeholder="password" class="field" name="password">
+            <input type="password" placeholder="repeat your password" class="field" name="repeat">
+			<button type="submit" class="btn">submit</button>
+
+            <div>
+                <% if (typeof error != "undefined") { %>
+                    <%= error %>
+                <% } %>
+            </div>
+		</form>
+		<div class="pass-link">
+			<a href="/landing" >Back to Homepage</a>
+		</div>
+        </div>
+    </body>
+</html>
